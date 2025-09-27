@@ -76,10 +76,10 @@ def main():
                         pause = False
 
                 elif event.key == pygame.K_ESCAPE:
-                    if not pause:
+                    if not pause and not game_over:
                         last_direction = direction
                         pause = True
-                    elif pause:
+                    else:
                         quit() 
                         sys.exit()
 
@@ -140,11 +140,11 @@ def main():
                 if i > 1 and segment["x"] == snake[0]["x"] and segment["y"] == snake[0]["y"]:
                     game_over = True
             
-            pygame.draw.rect(screen, color, segment_rect)
+            pygame.draw.rect(screen, color, segment_rect, 0, 10)
 
         # Food
         food_rect = pygame.Rect(food["x"], food["y"], bloc, bloc)
-        pygame.draw.rect(screen, (255, 255, 0), food_rect)
+        pygame.draw.rect(screen, (255, 255, 0), food_rect, 5, 10)
 
         # Game Over conditions
         if game_over or pause:
