@@ -68,12 +68,19 @@ def main():
 
         if direction == "r":
             headX += bloc
+            if headX == screen.get_width(): game_over = True
+
         elif direction == "l":
             headX -= bloc
+            if headX == -bloc: game_over = True
+
         elif direction == "u":
             headY -= bloc
+            if headY == -bloc: game_over = True
+
         elif direction == "d":
             headY += bloc
+            if headY == screen.get_height(): game_over = True
         
         head = {
                 "x": headX,
