@@ -62,37 +62,38 @@ def main():
                         game_over = False
 
         # Moving Snake's head to direction
-        head = snake[0]
-        headX = head["x"]
-        headY = head["y"]
+        if not game_over:
+            head = snake[0]
+            headX = head["x"]
+            headY = head["y"]
 
-        if direction == "r":
-            headX += bloc
-            if headX == screen.get_width(): game_over = True
+            if direction == "r":
+                headX += bloc
+                if headX == screen.get_width(): game_over = True
 
-        elif direction == "l":
-            headX -= bloc
-            if headX == -bloc: game_over = True
+            elif direction == "l":
+                headX -= bloc
+                if headX == -bloc: game_over = True
 
-        elif direction == "u":
-            headY -= bloc
-            if headY == -bloc: game_over = True
+            elif direction == "u":
+                headY -= bloc
+                if headY == -bloc: game_over = True
 
-        elif direction == "d":
-            headY += bloc
-            if headY == screen.get_height(): game_over = True
-        
-        head = {
-                "x": headX,
-                "y": headY
-            }
+            elif direction == "d":
+                headY += bloc
+                if headY == screen.get_height(): game_over = True
+            
+            head = {
+                    "x": headX,
+                    "y": headY
+                }
 
-        # Update snake with new head
-        snake.remove(snake[len(snake) - 1])
-        snake.reverse()
-        snake.append(head)
-        snake.reverse()
-
+            # Update snake with new head
+            snake.remove(snake[len(snake) - 1])
+            snake.reverse()
+            snake.append(head)
+            snake.reverse()
+            
         # Draw everything
         screen.fill((0, 5, 10))
         # Snake
