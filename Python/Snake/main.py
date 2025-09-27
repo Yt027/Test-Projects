@@ -8,6 +8,7 @@ screen = pygame.display.set_mode((600, 500))
 pygame.display.set_caption("Snake.py")
 bloc = 20
 score = 0
+game_over = False
 
 def generatePos():
     return {
@@ -17,7 +18,8 @@ def generatePos():
 
 
 def main():
-    global score, bloc, screen
+    global score, bloc, screen, game_over
+    game_over = True
     # Variables    
     snake = [
             {
@@ -36,14 +38,21 @@ def main():
             
             if event.type == pygame.KEYDOWN:
                 # Manage Direction changes
-                if event.key == pygame.K_RIGHT and direction != "l":
+                if event.key == pygame.K_RIGHT and direction != "l" and not game_over:
                     direction = "r"
-                elif event.key == pygame.K_LEFT and direction != "r":
+                elif event.key == pygame.K_LEFT and direction != "r" and not game_over:
                     direction = "l"
-                elif event.key == pygame.K_DOWN and direction != "u":
+                elif event.key == pygame.K_DOWN and direction != "u" and not game_over:
                     direction = "d"
-                elif event.key == pygame.K_UP and direction != "d":
+                elif event.key == pygame.K_UP and direction != "d" and not game_over:
                     direction = "u"
+                
+                if event.key == pygame.K_SPACE:
+                    if game_over:
+                        snake = [generatePos()]
+                        food = generatePos()
+                        score = 0
+                        game_over = False
 
         # Moving Snake's head to direction
         head = snake[0]
@@ -94,6 +103,10 @@ def main():
         # Food
         food_rect = pygame.Rect(food["x"], food["y"], bloc, bloc)
         pygame.draw.rect(screen, (255, 255, 0), food_rect)
+
+        # Game Over conditions
+        if game_over:
+            direction = ""
 
         # Updating screen
         pygame.time.Clock().tick(6)
