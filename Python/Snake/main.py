@@ -41,14 +41,8 @@ def generatePos():
 
 def main():
     global score, bloc, screen, game_over, hight_score
-    game_over = True
     # Variables    
-    snake = [
-            {
-                "x": 0,
-                "y": 0
-            }
-        ]
+    snake = [generatePos()]
     food = generatePos()
 
     direction = ""
@@ -69,12 +63,16 @@ def main():
                 elif event.key == pygame.K_UP and direction != "d" and not game_over:
                     direction = "u"
                 
-                if event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_SPACE:
                     if game_over:
                         snake = [generatePos()]
                         food = generatePos()
                         score = 0
                         game_over = False
+
+                elif event.key == pygame.K_ESCAPE:
+                    quit() 
+                    sys.exit()
 
         # Moving Snake's head to direction
         if not game_over:
@@ -180,7 +178,7 @@ def main():
             screen.blit(game_over_restart, game_over_restart_rect)
 
             # Menu
-            game_over_hight_score = fonts["text"].render("Menu: [Echap]", (230, 230, 230))
+            game_over_hight_score = fonts["text"].render("Quitter: [Echap]", (230, 230, 230))
             game_over_hight_score_rect = game_over_hight_score.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 175)
             screen.blit(game_over_hight_score, game_over_hight_score_rect)
 
