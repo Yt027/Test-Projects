@@ -93,7 +93,7 @@ def main():
             snake.reverse()
             snake.append(head)
             snake.reverse()
-            
+
         # Draw everything
         screen.fill((0, 5, 10))
         # Snake
@@ -112,6 +112,11 @@ def main():
                     food = generatePos()
                     score += 1
                     pygame.display.set_caption(f"Snake.py | Score: {score}")
+            
+            # Game over when snake's head touch itself
+            else:
+                if i > 1 and segment["x"] == snake[0]["x"] and segment["y"] == snake[0]["y"]:
+                    game_over = True
             
             pygame.draw.rect(screen, color, segment_rect)
 
