@@ -1,6 +1,7 @@
 from random import random
-import pygame, sys
-from ..gui import Font
+import pygame, sys, json
+# Be sure to have gui.py imported
+from ..__modules__.gui import Font
 pygame.init()
 
 
@@ -10,6 +11,20 @@ pygame.display.set_caption("Snake.py")
 bloc = 20
 score = 0
 game_over = False
+
+# Fetching higth
+hight_score = 0
+try:
+    open("data.json", "r")
+except:
+    file = open("data.json", "a")
+    file.write(r'{"snake": {"hight_score": 0}}')
+    file.close()
+
+with open("data.json", "r") as fp:
+    hight_score = json.load(fp)["snake"]["hight_score"]
+    print(hight_score)
+        
 
 fonts = {
     "title": Font(("Arial Bold", 34)),
@@ -25,7 +40,7 @@ def generatePos():
 
 
 def main():
-    global score, bloc, screen, game_over
+    global score, bloc, screen, game_over, hight_score
     game_over = True
     # Variables    
     snake = [
@@ -129,6 +144,14 @@ def main():
             # Stop the game
             direction = ""
 
+            # Checking for new hight score and saving it
+            if score > hight_score:
+                hight_score = score
+                with open("data.json", "w") as fp:
+                    fp.writelines(json.dumps({"snake": {"hight_score": hight_score}}))
+                    fp.close()
+                    
+
             # Board
             game_over_board = pygame.Rect(0, 50, 350, 200)
             game_over_board.center = (screen.get_width() / 2, screen.get_height() / 2)
@@ -147,7 +170,7 @@ def main():
             screen.blit(game_over_score, game_over_score_rect)
 
             # Hight Score
-            game_over_hight_score = fonts["text"].render(f"Meilleur Score: 10000", (230, 230, 230))
+            game_over_hight_score = fonts["text"].render(f"Meilleur Score: {hight_score}", (230, 230, 230))
             game_over_hight_score_rect = game_over_hight_score.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 125)
             screen.blit(game_over_hight_score, game_over_hight_score_rect)
 
