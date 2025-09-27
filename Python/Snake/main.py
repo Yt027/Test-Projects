@@ -36,13 +36,13 @@ def main():
             
             if event.type == pygame.KEYDOWN:
                 # Manage Direction changes
-                if event.key == pygame.K_RIGHT:
+                if event.key == pygame.K_RIGHT and direction != "l":
                     direction = "r"
-                elif event.key == pygame.K_LEFT:
+                elif event.key == pygame.K_LEFT and direction != "r":
                     direction = "l"
-                elif event.key == pygame.K_DOWN:
+                elif event.key == pygame.K_DOWN and direction != "u":
                     direction = "d"
-                elif event.key == pygame.K_UP:
+                elif event.key == pygame.K_UP and direction != "d":
                     direction = "u"
 
         # Moving Snake's head to direction
