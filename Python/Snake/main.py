@@ -1,19 +1,26 @@
 from random import random
 import pygame, sys
+from ..gui import Font
 pygame.init()
 
 
 # Global Variables
-screen = pygame.display.set_mode((600, 500))
+screen = pygame.display.set_mode((600, 500), pygame.RESIZABLE)
 pygame.display.set_caption("Snake.py")
 bloc = 20
 score = 0
 game_over = False
 
+fonts = {
+    "title": Font(("Arial Bold", 34)),
+    "text": Font(("Arial", 14)),
+    "small_text": Font(("Arial", 12))
+}
+
 def generatePos():
     return {
-            "x": (int(random() * (screen.get_size()[0]/20)) * 20),
-            "y": (int(random() * (screen.get_size()[1]/20)) * 20)
+            "x": (int(random() * ((screen.get_width()/bloc) - 1)) * bloc),
+            "y": (int(random() * ((screen.get_height()/bloc) - 1)) * bloc)
         }
 
 
@@ -80,7 +87,7 @@ def main():
         snake.reverse()
 
         # Draw everything
-        screen.fill((0, 0, 0))
+        screen.fill((0, 5, 10))
         # Snake
         for i in range(len(snake)):
             segment = snake[i]
@@ -106,7 +113,40 @@ def main():
 
         # Game Over conditions
         if game_over:
+            # Stop the game
             direction = ""
+
+            # Board
+            game_over_board = pygame.Rect(0, 50, 350, 200)
+            game_over_board.center = (screen.get_width() / 2, screen.get_height() / 2)
+            pygame.draw.rect(screen, (55, 55, 65), game_over_board, 0, 10)
+
+            # Game Over
+            game_over_title = fonts["title"].render("Game Over", (0, 255, 0))
+            game_over_title_rect = game_over_title.get_rect()
+            game_over_title_rect.top = game_over_board.top + 10
+            game_over_title_rect.centerx = game_over_board.centerx
+            screen.blit(game_over_title, game_over_title_rect)
+
+            # Score
+            game_over_score = fonts["text"].render(f"Score: {score}", (230, 230, 230))
+            game_over_score_rect = game_over_score.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 100)
+            screen.blit(game_over_score, game_over_score_rect)
+
+            # Hight Score
+            game_over_hight_score = fonts["text"].render(f"Meilleur Score: 10000", (230, 230, 230))
+            game_over_hight_score_rect = game_over_hight_score.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 125)
+            screen.blit(game_over_hight_score, game_over_hight_score_rect)
+
+            # Restart
+            game_over_restart = fonts["text"].render("Récommencer: [Espace]", (230, 230, 230))
+            game_over_restart_rect = game_over_restart.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 150)
+            screen.blit(game_over_restart, game_over_restart_rect)
+
+            # Menu
+            game_over_hight_score = fonts["text"].render("Menu: [Echap]", (230, 230, 230))
+            game_over_hight_score_rect = game_over_hight_score.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 175)
+            screen.blit(game_over_hight_score, game_over_hight_score_rect)
 
         # Updating screen
         pygame.time.Clock().tick(6)
