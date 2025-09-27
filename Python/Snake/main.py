@@ -11,6 +11,7 @@ pygame.display.set_caption("Snake.py")
 bloc = 20
 score = 0
 game_over = False
+pause = False
 
 # Fetching higth
 hight_score = 0
@@ -40,12 +41,13 @@ def generatePos():
 
 
 def main():
-    global score, bloc, screen, game_over, hight_score
+    global score, bloc, screen, game_over, pause, hight_score
     # Variables    
     snake = [generatePos()]
     food = generatePos()
 
     direction = ""
+    last_direction = ""
     while True:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -69,13 +71,20 @@ def main():
                         food = generatePos()
                         score = 0
                         game_over = False
+                    elif pause:
+                        direction = last_direction
+                        pause = False
 
                 elif event.key == pygame.K_ESCAPE:
-                    quit() 
-                    sys.exit()
+                    if not pause:
+                        last_direction = direction
+                        pause = True
+                    elif pause:
+                        quit() 
+                        sys.exit()
 
         # Moving Snake's head to direction
-        if not game_over:
+        if not game_over and not pause:
             head = snake[0]
             headX = head["x"]
             headY = head["y"]
@@ -138,12 +147,12 @@ def main():
         pygame.draw.rect(screen, (255, 255, 0), food_rect)
 
         # Game Over conditions
-        if game_over:
+        if game_over or pause:
             # Stop the game
             direction = ""
 
             # Checking for new hight score and saving it
-            if score > hight_score:
+            if score > hight_score and not pause:
                 hight_score = score
                 with open("data.json", "w") as fp:
                     fp.writelines(json.dumps({"snake": {"hight_score": hight_score}}))
@@ -157,6 +166,7 @@ def main():
 
             # Game Over
             game_over_title = fonts["title"].render("Game Over", (0, 255, 0))
+            if pause: game_over_title = fonts["title"].render("Pause", (0, 255, 0))
             game_over_title_rect = game_over_title.get_rect()
             game_over_title_rect.top = game_over_board.top + 10
             game_over_title_rect.centerx = game_over_board.centerx
@@ -174,6 +184,7 @@ def main():
 
             # Restart
             game_over_restart = fonts["text"].render("Récommencer: [Espace]", (230, 230, 230))
+            if pause: game_over_restart = fonts["text"].render("Continuer: [Espace]", (230, 230, 230))
             game_over_restart_rect = game_over_restart.get_rect(left=game_over_board.x + 15, top=game_over_board.y + 150)
             screen.blit(game_over_restart, game_over_restart_rect)
 
