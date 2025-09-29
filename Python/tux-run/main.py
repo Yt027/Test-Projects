@@ -35,16 +35,13 @@ def main():
         # print(PLAYER["velocity"])
         # print(len(GAME["OBJ"]))
         if PLAYER["y"] < GROUND - 75 - 5:
-
-            # if PLAYER["velocity"] < -PLAYER["jump_speed"] * 1.5:
-            #     PLAYER["velocity"] = 0
-            # else:
             PLAYER["velocity"] += PLAYER["jump_speed"]
             PLAYER["y"] += PLAYER["velocity"] * GAME["DELTA"]
-        else:
-            PLAYER["y"] = GROUND - 75 - 5
-            PLAYER["velocity"] = 0
-        
+
+            if PLAYER["y"] >= GROUND - 75 - 5 - (PLAYER["jump_speed"] / 2) and PLAYER["velocity"] >= 0:
+                PLAYER["y"] = GROUND - 75 - 5
+                # PLAYER["velocity"] = 0
+    
 
         
         # Draw everything
