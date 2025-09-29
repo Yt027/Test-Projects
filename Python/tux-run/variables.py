@@ -13,7 +13,16 @@ FPS = 30
 GROUND = SCREEN_HEIGHT - 20
 
 GAME = {
-    "DELTA": 0.016
+    "DELTA": 0.016,
+    "OBJ": [
+        # List of game obstacle types
+        [SCREEN_WIDTH + 10, GROUND - 40, 20, 40], # Small cactus
+        [SCREEN_WIDTH + 10, GROUND - 60, 30, 60], # Large cactus
+        [SCREEN_WIDTH + 10, GROUND - 30, 40, 30]  # Bird
+    ],
+    "OBS": [
+        # List of current obstacles on screen    
+    ]
 }
 
 PLAYER = {
@@ -23,7 +32,8 @@ PLAYER = {
     "y": GROUND - 75 - 5,
     "velocity": 0,
     "jump_hight": 1600,
-    "jump_speed": 120
+    "jump_speed": 100,
+    "run_speed": 300
 }
 
 COLORS = {

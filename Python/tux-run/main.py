@@ -7,11 +7,16 @@ from modules import *
 
 pygame.display.set_caption("Tux Run")
 
+def add_OBS():
+    GAME["OBS"].append([SCREEN_WIDTH + 10, GROUND - 40, 20, 40])
 
 
 # Game function
 def main():
     while True:
+        if randint(0, 100) == 5 and len(GAME["OBS"]) < 3:
+            add_OBS()
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 Window.close()
@@ -28,7 +33,7 @@ def main():
         # Managing player
         # Jump
         # print(PLAYER["velocity"])
-        print(GAME["DELTA"])
+        # print(len(GAME["OBJ"]))
         if PLAYER["y"] < GROUND - 75 - 5:
 
             # if PLAYER["velocity"] < -PLAYER["jump_speed"] * 1.5:
@@ -47,6 +52,18 @@ def main():
 
         # Ground
         pygame.draw.line(screen, (COLORS["ground"]), (10, GROUND), (SCREEN_WIDTH - 10, GROUND))
+
+        # Obstacles
+        OBS_BIN = []
+        for obs in GAME["OBS"]:
+            obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
+            pygame.draw.rect(screen, COLORS["primary"], (obs[0], obs[1], obs[2], obs[3]))
+
+            if obs[0] <= -10:
+                OBS_BIN.append(obs)
+        
+        for obs_ in OBS_BIN:
+            GAME["OBS"].remove(obs_)
 
         # Player
         pygame.draw.rect(screen, COLORS["primary"], (PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"]))
