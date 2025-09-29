@@ -27,7 +27,7 @@ def main():
 
                 # Making player jump
                 elif event.key == pygame.K_SPACE:
-                    if PLAYER["velocity"] == 0:
+                    if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - 75 - 5:
                         # Avoid multiple jumps
                         PLAYER["velocity"] = -1300
                         PLAYER["y"] -= PLAYER["jump_hight"] * GAME["DELTA"]
