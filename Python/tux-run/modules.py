@@ -1,3 +1,4 @@
+import pygame
 from variables import *
 # Classes for game modules
 
@@ -7,11 +8,11 @@ class Window:
         screen.fill(COLORS["background"])
 
     def update():
-        global FPS, DELTA, MAIN_CLOCK
         MAIN_CLOCK.tick(FPS)
-        FPS = MAIN_CLOCK.get_fps()
-        DELTA = 1/FPS if FPS > 0 else 0
-        pygame.display.flip()
+        fps = MAIN_CLOCK.get_fps()
+        if fps == 0: fps = 60 # Avoid division by zero
+        GAME["DELTA"] = 1/fps
+        pygame.display.update()
 
     def close():
         pygame.quit()
