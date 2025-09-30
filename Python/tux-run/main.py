@@ -58,7 +58,7 @@ def main():
             obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
             pygame.draw.rect(screen, COLORS["primary"], (obs[0], obs[1], obs[2], obs[3]))
 
-            if obs[0] <= -10:
+            if obs[0] <= -100:
                 OBS_BIN.append(obs)
         
         for obs_ in OBS_BIN:
