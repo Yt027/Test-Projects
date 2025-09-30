@@ -8,7 +8,7 @@ from modules import *
 pygame.display.set_caption("Tux Run")
 
 def add_OBS():
-    GAME["OBS"].append([SCREEN_WIDTH + 10, GROUND - 40, 20, 40])
+    GAME["OBS"].append(GAME["OBJ"][randint(0, 2)])
 
 
 # Game function

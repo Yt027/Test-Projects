@@ -18,7 +18,7 @@ GAME = {
         # List of game obstacle types
         [SCREEN_WIDTH + 10, GROUND - 40, 20, 40], # Small cactus
         [SCREEN_WIDTH + 10, GROUND - 60, 30, 60], # Large cactus
-        [SCREEN_WIDTH + 10, GROUND - 30, 40, 30]  # Bird
+        [SCREEN_WIDTH + 10, GROUND - 130, 40, 30]  # Bird
     ],
     "OBS": [
         # List of current obstacles on screen    
