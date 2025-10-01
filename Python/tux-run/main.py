@@ -8,13 +8,14 @@ from modules import *
 pygame.display.set_caption("Tux Run")
 
 def add_OBS():
-    GAME["OBS"].append(GAME["OBJ"][randint(0, 2)])
+    GAME["OBS"].append(GAME["OBJ"][randint(0, 2)].copy())
 
 
 # Game function
 def main():
     while True:
-        if randint(0, 100) == 5 and len(GAME["OBS"]) < 3:
+        print(GAME["real_fps"])
+        if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3:
             add_OBS()
 
         for event in pygame.event.get():
@@ -56,7 +57,12 @@ def main():
         OBS_BIN = []
         for obs in GAME["OBS"]:
             obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
-            pygame.draw.rect(screen, COLORS["primary"], (obs[0], obs[1], obs[2], obs[3]))
+            obs_rect = pygame.Rect(obs[0], obs[1], obs[2], obs[3])
+            pygame.draw.rect(screen, COLORS["primary"], obs_rect)
+
+            # Manage collision with player
+            if obs_rect.colliderect((PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"])):
+                GAME["OVER"] = True
 
             if obs[0] <= -100:
                 OBS_BIN.append(obs)
@@ -66,6 +72,10 @@ def main():
 
         # Player
         pygame.draw.rect(screen, COLORS["primary"], (PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"]))
+
+        # Game Over
+        if GAME["OVER"]:
+            print("Game Over")
 
         # Updating screen
         Window.update()

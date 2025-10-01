@@ -9,11 +9,12 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 MAIN_CLOCK = pygame.time.Clock()
-FPS = 30
+FPS = 60
 GROUND = SCREEN_HEIGHT - 20
 
 GAME = {
     "DELTA": 0.016,
+    "real_fps": 60,
     "OBJ": [
         # List of game obstacle types
         [SCREEN_WIDTH + 10, GROUND - 40, 20, 40], # Small cactus
@@ -22,7 +23,8 @@ GAME = {
     ],
     "OBS": [
         # List of current obstacles on screen    
-    ]
+    ],
+    "OVER": False
 }
 
 PLAYER = {

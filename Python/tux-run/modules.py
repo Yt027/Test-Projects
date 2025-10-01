@@ -9,9 +9,9 @@ class Window:
 
     def update():
         MAIN_CLOCK.tick(FPS)
-        fps = MAIN_CLOCK.get_fps()
-        if fps == 0: fps = 60 # Avoid division by zero
-        GAME["DELTA"] = 1/fps
+        GAME["real_fps"] = MAIN_CLOCK.get_fps()
+        if GAME["real_fps"] == 0: GAME["real_fps"] = 10 # Avoid division by zero
+        GAME["DELTA"] = 1/GAME["real_fps"]
         pygame.display.update()
 
     def close():
