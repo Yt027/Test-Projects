@@ -15,8 +15,9 @@ def add_OBS():
 def main():
     print(len(PLAYER["images"]))
     PLAYER["img_index"] = 0
+    PLAYER["img_timer"] = 0
     while True:
-        # print(GAME["DELTA"] * 1000)
+        # Loading obstacles
         if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3:
             add_OBS()
 
@@ -36,6 +37,12 @@ def main():
                         PLAYER["y"] -= PLAYER["jump_hight"] * GAME["DELTA"]
 
         # Managing player
+        PLAYER["img_timer"] += GAME["DELTA"] * 1000
+        if PLAYER["img_timer"] >= 70: # 15 images per second
+            PLAYER["img_timer"] -= 70
+            PLAYER["img_index"] += 1
+            if PLAYER["img_index"] == len(PLAYER["images"]):
+                PLAYER["img_index"] = 0
         # Jump
         if PLAYER["y"] < GROUND - PLAYER["h"] - 5:
             PLAYER["velocity"] += PLAYER["jump_speed"]
