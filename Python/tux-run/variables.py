@@ -9,7 +9,7 @@ SCREEN_WIDTH = 800
 SCREEN_HEIGHT = 500
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 MAIN_CLOCK = pygame.time.Clock()
-FPS = 60
+FPS = 30
 GROUND = SCREEN_HEIGHT - 20
 
 GAME = {
@@ -28,14 +28,15 @@ GAME = {
 }
 
 PLAYER = {
-    "w": 50,
-    "h": 75,
+    "w": 100,
+    "h": 100,
     "x": 30,
-    "y": GROUND - 75 - 5,
+    "y": GROUND - 100 - 5,
     "velocity": 0,
     "jump_hight": 1600,
     "jump_speed": 100,
-    "run_speed": 300
+    "run_speed": 300,
+    "images": [pygame.image.load(f"./assets/player/run{i}.png") for i in range(8)]
 }
 
 COLORS = {

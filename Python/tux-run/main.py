@@ -13,8 +13,10 @@ def add_OBS():
 
 # Game function
 def main():
+    print(len(PLAYER["images"]))
+    PLAYER["img_index"] = 0
     while True:
-        print(GAME["real_fps"])
+        # print(GAME["DELTA"] * 1000)
         if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3:
             add_OBS()
 
@@ -28,21 +30,19 @@ def main():
 
                 # Making player jump
                 elif event.key == pygame.K_SPACE:
-                    if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - 75 - 5:
+                    if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - PLAYER["h"] - 5:
                         # Avoid multiple jumps
                         PLAYER["velocity"] = -1300
                         PLAYER["y"] -= PLAYER["jump_hight"] * GAME["DELTA"]
 
         # Managing player
         # Jump
-        # print(PLAYER["velocity"])
-        # print(len(GAME["OBJ"]))
-        if PLAYER["y"] < GROUND - 75 - 5:
+        if PLAYER["y"] < GROUND - PLAYER["h"] - 5:
             PLAYER["velocity"] += PLAYER["jump_speed"]
             PLAYER["y"] += PLAYER["velocity"] * GAME["DELTA"]
 
-            if PLAYER["y"] >= GROUND - 75 - 5 - (PLAYER["jump_speed"] / 2) and PLAYER["velocity"] >= 0:
-                PLAYER["y"] = GROUND - 75 - 5
+            if PLAYER["y"] >= GROUND - PLAYER["h"] - 5 - (PLAYER["jump_speed"] / 2) and PLAYER["velocity"] >= 0:
+                PLAYER["y"] = GROUND - PLAYER["h"] - 5
                 PLAYER["velocity"] = 0
     
 
@@ -71,7 +71,8 @@ def main():
             GAME["OBS"].remove(obs_)
 
         # Player
-        pygame.draw.rect(screen, COLORS["primary"], (PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"]))
+        screen.blit(pygame.transform.scale(PLAYER["images"][PLAYER["img_index"]], (100, 100)), (PLAYER["x"], PLAYER["y"]))
+        # pygame.draw.rect(screen, COLORS["primary"], (PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"]))
 
         # Game Over
         if GAME["OVER"]:
