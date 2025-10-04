@@ -15,11 +15,18 @@ def add_OBS():
 def main():
     PLAYER["img_index"] = 0
     PLAYER["img_timer"] = 0
+
+    # Delta timer for obstacle generation
+    OBS_DELTA = 0
     while True:
         print(PLAYER["health"])
         # Loading obstacles
-        if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3:
+        if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3 and OBS_DELTA <= 0:
             add_OBS()
+            OBS_DELTA = 750 # 750 miliseconds minimum delay between randomised obstacles
+
+        if OBS_DELTA > 0:
+            OBS_DELTA -= GAME["DELTA"] * 1000
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
