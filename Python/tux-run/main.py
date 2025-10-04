@@ -13,10 +13,10 @@ def add_OBS():
 
 # Game function
 def main():
-    print(len(PLAYER["images"]))
     PLAYER["img_index"] = 0
     PLAYER["img_timer"] = 0
     while True:
+        print(PLAYER["health"])
         # Loading obstacles
         if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3:
             add_OBS()
@@ -33,10 +33,10 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - PLAYER["h"] - 5:
                         # Avoid multiple jumps
-                        PLAYER["velocity"] = -1300
+                        PLAYER["velocity"] = -40 * (1/GAME["DELTA"])
                         PLAYER["y"] -= PLAYER["jump_hight"] * GAME["DELTA"]
 
-        # Managing player
+        # Managing player image changes
         PLAYER["img_timer"] += GAME["DELTA"] * 1000
         if PLAYER["img_timer"] >= 70: # 15 images per second
             PLAYER["img_timer"] -= 70
@@ -69,7 +69,7 @@ def main():
 
             # Manage collision with player
             if obs_rect.colliderect((PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"])):
-                GAME["OVER"] = True
+                PLAYER["health"] -= 1
 
             if obs[0] <= -100:
                 OBS_BIN.append(obs)

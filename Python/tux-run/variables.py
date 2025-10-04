@@ -32,6 +32,7 @@ PLAYER = {
     "h": 100,
     "x": 30,
     "y": GROUND - 100 - 5,
+    "health": 100,
     "velocity": 0,
     "jump_hight": 1600,
     "jump_speed": 100,
