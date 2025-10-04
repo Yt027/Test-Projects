@@ -19,7 +19,7 @@ def main():
     # Delta timer for obstacle generation
     OBS_DELTA = 0
     while True:
-        print(PLAYER["health"])
+        print(PLAYER["bonus"])
         # Loading obstacles
         if randint(0, 100) <= 1 and len(GAME["OBS"]) < 3 and OBS_DELTA <= 0:
             add_OBS()
@@ -69,14 +69,21 @@ def main():
 
         # Obstacles
         OBS_BIN = []
-        for obs in GAME["OBS"]:
+        for i in range(len(GAME["OBS"])):
+            obs = GAME["OBS"][i]
             obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
             obs_rect = pygame.Rect(obs[0], obs[1], obs[2], obs[3])
             pygame.draw.rect(screen, COLORS["primary"], obs_rect)
 
+
             # Manage collision with player
             if obs_rect.colliderect((PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"])):
                 PLAYER["health"] -= 1
+
+            else:
+                # Manage player's bonus when jumping upon obstacle
+                if PLAYER["y"] < GROUND - PLAYER["h"] - 5 and obs[0] <= PLAYER["x"] and obs[0] > PLAYER["x"] - PLAYER["run_speed"] * GAME["DELTA"]:
+                    PLAYER["bonus"] += 1
 
             if obs[0] <= -100:
                 OBS_BIN.append(obs)
