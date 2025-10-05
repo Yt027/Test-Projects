@@ -16,6 +16,9 @@ def main():
     PLAYER["img_index"] = 0
     PLAYER["img_timer"] = 0
 
+    # Camera
+    camera_y = 200
+
     # Delta timer for obstacle generation
     OBS_DELTA = 0
     while True:
@@ -58,6 +61,13 @@ def main():
             if PLAYER["y"] >= GROUND - PLAYER["h"]:
                 PLAYER["y"] = GROUND - PLAYER["h"]
                 PLAYER["velocity"] = 0
+            
+            # Update camera based on player's jump height
+            camera_y += (((GROUND - PLAYER["h"]) - PLAYER["y"]) * 0.005 - camera_y) * 0.1
+        
+        else:
+            # Smoothly return camera to ground level
+            camera_y += (50 - camera_y) * 0.025
     
 
         
@@ -65,19 +75,19 @@ def main():
         Window.draw()
 
         # Ground
-        pygame.draw.line(screen, (COLORS["ground"]), (10, GROUND), (SCREEN_WIDTH - 10, GROUND))
+        pygame.draw.line(screen, (COLORS["ground"]), (10, GROUND - camera_y), (SCREEN_WIDTH - 10, GROUND - camera_y))
 
         # Obstacles
         OBS_BIN = []
         for i in range(len(GAME["OBS"])):
             obs = GAME["OBS"][i]
             obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
-            obs_rect = pygame.Rect(obs[0], obs[1], obs[2], obs[3])
+            obs_rect = pygame.Rect(obs[0], obs[1] - camera_y, obs[2], obs[3])
             pygame.draw.rect(screen, COLORS["primary"], obs_rect)
 
 
             # Manage collision with player
-            if obs_rect.colliderect((PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"])):
+            if obs_rect.colliderect((PLAYER["x"], PLAYER["y"] - camera_y, PLAYER["w"], PLAYER["h"])):
                 PLAYER["health"] -= 1
 
             else:
@@ -92,7 +102,7 @@ def main():
             GAME["OBS"].remove(obs_)
 
         # Player
-        screen.blit(pygame.transform.scale(PLAYER["images"][PLAYER["img_index"]], (100, 100)), (PLAYER["x"], PLAYER["y"]))
+        screen.blit(pygame.transform.scale(PLAYER["images"][PLAYER["img_index"]], (100, 100)), (PLAYER["x"], PLAYER["y"] - camera_y))
         # pygame.draw.rect(screen, COLORS["primary"], (PLAYER["x"], PLAYER["y"], PLAYER["w"], PLAYER["h"]))
 
         # Game Over
