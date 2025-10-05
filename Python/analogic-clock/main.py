@@ -14,6 +14,10 @@ colors = {
     "red": (255, 50, 50)
 }
 
+fonts = {
+    "hour": Font(("Arial", 10))
+}
+
 
 
 def main():
@@ -33,6 +37,8 @@ def main():
         for i in range(12):
             angle = int(i * (360 / 12))
             pygame.draw.arc(screen, colors["main"], (100, 100, 400, 400), math.radians(angle - 1), math.radians(angle + 1), 3)
+            # pygame.draw.circle(screen, colors["red"], (abs((math.cos(angle) * 90) + 300), abs((math.cos(angle) * 90) + 300)), 2.5)
+            # print(f"{angle} - {(math.cos(angle) * 360) + 300} - {(math.sin(angle) * 360) + 300}")
 
         # Clock Hands
         # Hour
@@ -44,13 +50,11 @@ def main():
         # Minute
         second = datetime.datetime.now().minute
         angle = -(int(second * 360 / 60) - 90)
-        print(second)
         pygame.draw.arc(screen, colors["main"], (200, 200, 200, 200), math.radians(angle - 1), math.radians(angle + 1), 100)
 
         # Second
         second = datetime.datetime.now().second
         angle = -(int(second * 360 / 60) - 90)
-        print(second)
         pygame.draw.arc(screen, colors["red"], (130, 130, 340, 340), math.radians(angle - 1), math.radians(angle + 1), 170)
 
 
