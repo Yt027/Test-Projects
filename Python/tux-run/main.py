@@ -38,7 +38,7 @@ def main():
 
                 # Making player jump
                 elif event.key == pygame.K_SPACE:
-                    if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - PLAYER["h"] - 5:
+                    if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - PLAYER["h"]:
                         # Avoid multiple jumps
                         PLAYER["y"] -= 50 # Small offset to avoid multiple jumps
                         PLAYER["velocity"] = PLAYER["jump_velocity"]
@@ -51,12 +51,12 @@ def main():
             if PLAYER["img_index"] == len(PLAYER["images"]):
                 PLAYER["img_index"] = 0
         # Jump
-        if PLAYER["y"] < GROUND - PLAYER["h"] - 5:
+        if PLAYER["y"] < GROUND - PLAYER["h"]:
             PLAYER["velocity"] += PLAYER["gravity"] * GAME["DELTA"]
             PLAYER["y"] += PLAYER["velocity"] * GAME["DELTA"]
 
-            if PLAYER["y"] >= GROUND - PLAYER["h"] - 5:
-                PLAYER["y"] = GROUND - PLAYER["h"] - 5
+            if PLAYER["y"] >= GROUND - PLAYER["h"]:
+                PLAYER["y"] = GROUND - PLAYER["h"]
                 PLAYER["velocity"] = 0
     
 
@@ -82,7 +82,7 @@ def main():
 
             else:
                 # Manage player's bonus when jumping upon obstacle
-                if PLAYER["y"] < GROUND - PLAYER["h"] - 5 and obs[0] <= PLAYER["x"] and obs[0] > PLAYER["x"] - PLAYER["run_speed"] * GAME["DELTA"]:
+                if PLAYER["y"] < GROUND - PLAYER["h"] and obs[0] <= PLAYER["x"] and obs[0] > PLAYER["x"] - PLAYER["run_speed"] * GAME["DELTA"]:
                     PLAYER["bonus"] += 1
 
             if obs[0] <= -100:

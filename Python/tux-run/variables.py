@@ -31,7 +31,7 @@ PLAYER = {
     "w": 100,
     "h": 100,
     "x": 30,
-    "y": GROUND - 100 - 5,
+    "y": GROUND - 100,
     "health": 100,
     "bonus": 0,
     "velocity": 0,
