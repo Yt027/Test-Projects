@@ -13,7 +13,7 @@ score = 0
 game_over = False
 pause = False
 
-# Fetching higth
+# Fetching higth score
 hight_score = 0
 try:
     open("data.json", "r")
@@ -112,9 +112,7 @@ def main():
 
             # Update snake with new head
             snake.remove(snake[len(snake) - 1])
-            snake.reverse()
-            snake.append(head)
-            snake.reverse()
+            snake[:] = [head] + snake
 
         # Draw everything
         screen.fill((0, 5, 10))
@@ -128,9 +126,7 @@ def main():
             if i == 0:
                 color = (0, 255, 0)
                 if segment["x"] == food["x"] and segment["y"] == food["y"]:
-                    snake.reverse()
-                    snake.append(food)
-                    snake.reverse()
+                    snake[:] = [food] + snake
                     food = generatePos()
                     score += 1
                     pygame.display.set_caption(f"Snake.py | Score: {score}")
