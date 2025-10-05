@@ -40,8 +40,8 @@ def main():
                 elif event.key == pygame.K_SPACE:
                     if PLAYER["velocity"] == 0 and PLAYER["y"] == GROUND - PLAYER["h"] - 5:
                         # Avoid multiple jumps
-                        PLAYER["velocity"] = -40 * (1/GAME["DELTA"])
-                        PLAYER["y"] -= PLAYER["jump_hight"] * GAME["DELTA"]
+                        PLAYER["y"] -= 50 # Small offset to avoid multiple jumps
+                        PLAYER["velocity"] = PLAYER["jump_velocity"]
 
         # Managing player image changes
         PLAYER["img_timer"] += GAME["DELTA"] * 1000
@@ -52,10 +52,10 @@ def main():
                 PLAYER["img_index"] = 0
         # Jump
         if PLAYER["y"] < GROUND - PLAYER["h"] - 5:
-            PLAYER["velocity"] += PLAYER["jump_speed"]
+            PLAYER["velocity"] += PLAYER["gravity"] * GAME["DELTA"]
             PLAYER["y"] += PLAYER["velocity"] * GAME["DELTA"]
 
-            if PLAYER["y"] >= GROUND - PLAYER["h"] - 5 - (PLAYER["jump_speed"] / 2) and PLAYER["velocity"] >= 0:
+            if PLAYER["y"] >= GROUND - PLAYER["h"] - 5:
                 PLAYER["y"] = GROUND - PLAYER["h"] - 5
                 PLAYER["velocity"] = 0
     

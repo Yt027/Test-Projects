@@ -35,8 +35,8 @@ PLAYER = {
     "health": 100,
     "bonus": 0,
     "velocity": 0,
-    "jump_hight": 1600,
-    "jump_speed": 100,
+    "jump_velocity": -1100, # Vitesse initiale du saut (pixels/seconde)
+    "gravity": 3000, # Gravité (pixels/seconde^2)
     "run_speed": 300,
     "images": [pygame.image.load(f"./assets/player/run{i}.png") for i in range(8)]
 }
