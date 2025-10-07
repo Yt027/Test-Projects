@@ -14,7 +14,14 @@ function Shop() {
                 <SearchBox input={searchInput} setInput={setSearchInput}  />
             </div>
 
-            <Card />
+            <div
+                className="products flex flex-wrap gap-4 justify-center p-3"
+            >
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+            </div>
         </>
     )
 }
