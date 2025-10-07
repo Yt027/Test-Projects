@@ -7,3 +7,13 @@
 .search_box input {
   outline: none
 }
+
+
+.product_card {
+  position: relative;
+}
+.product_card .cart-btn {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
