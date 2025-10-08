@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { ArrowLeft, LayoutDashboard } from "lucide-react"
+import { ArrowLeft, LayoutDashboard, PhoneCall, ShoppingCartIcon, Users2 } from "lucide-react"
 
 function Sidebar() {
     const [deployed, Deploy] = useState(false)
@@ -11,7 +11,7 @@ function Sidebar() {
 
     return (
         <aside 
-            className={`sidebar flex gap-5 flex-col items-end bg-gray-100 h-80 p-6 pt-5 rounded-2xl w-20 transition-all duration-300 ease-in-out ${deployed ? "w-40" : ""}`}
+            className={`sidebar flex gap-5 flex-col items-end bg-gray-100 p-6 pt-5 rounded-2xl w-20 transition-all duration-300 ease-in-out ${deployed ? "w-40" : ""}`}
         >
             <div className="logo flex items-center justify-center rounded-md font-black bg-gray-600 text-white w-7 h-7">S</div>
 
@@ -23,16 +23,46 @@ function Sidebar() {
             </div>
 
             <ul 
-                className="links"
+                className="links flex flex-col gap-2 items-end mt-3"
             >
                 <li 
-                    className="item flex items-center gap-3"
+                    className="item group cursor-pointer flex items-center gap-3"
                 >
-                    <span className="text-sm font-bold">Home</span>
+                    <span className={`text-gray-700 text-sm font-bold group-hover:text-primary ${!deployed ? "hidden" : ""}`}>Home</span>
                     <div 
-                        className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded"
+                        className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded group-hover:bg-primary"
                     >
-                        <LayoutDashboard className="w-4 h-4" />
+                        <LayoutDashboard className="w-4 h-4 group-hover:text-white" />
+                    </div>
+                </li>
+                <li 
+                    className="item group cursor-pointer flex items-center gap-3"
+                >
+                    <span className={`text-gray-700 text-sm font-bold group-hover:text-primary ${!deployed ? "hidden" : ""}`}>Boutique</span>
+                    <div 
+                        className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded group-hover:bg-primary"
+                    >
+                        <ShoppingCartIcon className="w-4 h-4 group-hover:text-white" />
+                    </div>
+                </li>
+                <li 
+                    className="item group cursor-pointer flex items-center gap-3"
+                >
+                    <span className={`text-gray-700 text-sm font-bold group-hover:text-primary ${!deployed ? "hidden" : ""}`}>Contact</span>
+                    <div 
+                        className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded group-hover:bg-primary"
+                    >
+                        <PhoneCall className="w-4 h-4 group-hover:text-white" />
+                    </div>
+                </li>
+                <li 
+                    className="item group cursor-pointer flex items-center gap-3"
+                >
+                    <span className={`text-gray-700 text-sm font-bold group-hover:text-primary ${!deployed ? "hidden" : ""}`}>A propos</span>
+                    <div 
+                        className="flex items-center justify-center w-8 h-8 bg-gray-200 rounded group-hover:bg-primary"
+                    >
+                        <Users2 className="w-4 h-4 group-hover:text-white" />
                     </div>
                 </li>
             </ul>
