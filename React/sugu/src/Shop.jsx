@@ -12,14 +12,17 @@ function Shop() {
             <Header />
 
             <div 
-                className="hero z-1 w-full h-70 
+                className="hero z-1 w-full h-100 
                     bg-[url(/hero.jpg)] 
-                    bg-cover flex items-end 
-                    justify-center p-1 pb-3 mb-10"
+                    bg-cover flex items-center 
+                    justify-end p-1 pb-3 mb-10
+                    flex flex-col gap-3"
             >
-                <div className="hero flex flex-col p-3">
-                    <SearchBox className="z-10" input={searchInput} setInput={setSearchInput}  />
-                </div>
+                <h1
+                    className='italic text-5xl font-black text-white text-shadow-lg mb-3'
+                >Tout pour bouger</h1>
+
+                <SearchBox className="z-10" input={searchInput} setInput={setSearchInput}  />
             </div>
 
             <Sidebar />
