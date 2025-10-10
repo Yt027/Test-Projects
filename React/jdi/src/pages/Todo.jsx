@@ -45,6 +45,17 @@ function Todo() {
     const newTasks = tasks.filter((task) => task.registration !== id);
     setTasks(newTasks);
   }
+
+  const todaysTasks = tasks.filter((task) => {
+    const taskDate = new Date(task.registration);
+    const today = new Date();
+    return (
+      taskDate.getDate() === today.getDate() &&
+      taskDate.getMonth() === today.getMonth() &&
+      taskDate.getFullYear() === today.getFullYear()
+    );
+  });
+
   return (
     <div className="todo relative flex flex-col gap-6 bg-base-300 min-h-30 rounded-2xl">
       <div className="top-panel z-1000 sticky top-0 left-0 rounded-2xl bg-base-300 p-3 flex flex-col gap-4">
@@ -78,7 +89,7 @@ function Todo() {
         </div>
 
         {/* Filter Section */}
-        <div className="flex gap-3">
+        <div className="flex flex-wrap gap-3">
           <button
             className={`btn btn-sm btn-soft ${
               filter === 0 ? "btn-primary" : ""
@@ -123,7 +134,7 @@ function Todo() {
 
       {/* Task list */}
       <ul className="flex flex-col gap-4 p-3">
-        {tasks.map((task) => {
+        {todaysTasks.map((task) => {
           if (filter == 0 || filter == task.priority) {
             return (
               <li
