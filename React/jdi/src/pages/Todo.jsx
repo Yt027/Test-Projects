@@ -52,7 +52,8 @@ function Todo() {
     return (
       taskDate.getDate() === today.getDate() &&
       taskDate.getMonth() === today.getMonth() &&
-      taskDate.getFullYear() === today.getFullYear()
+      taskDate.getFullYear() === today.getFullYear() ||
+      task.done === false
     );
   });
 
@@ -157,7 +158,7 @@ function Todo() {
                     task.priority == 3
                       ? "error"
                       : task.priority == 2
-                      ? "primary"
+                      ? "warning"
                       : "soft"
                   }`}
                 >

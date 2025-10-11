@@ -28,9 +28,9 @@ const TaskHeatmapDaisy = ({ numDays = 365 }) => {
 
   const getColorsFromTheme = () => ({
     base: pick(["--b2", "--base-200", "--b1"], "#e5e7eb"), // case vide
-    successLight: pick(["--su", "--success", "--success-200"], "#bbf7d0"),
-    success: pick(["--sa", "--accent", "--success-500"], "#4ade80"),
-    successStrong: pick(["--p", "--primary", "--success-700"], "#15803d"),
+    successLight: pick(["--su", "--success", "--success-400"], "#54b176ff"),
+    success: pick(["--sa", "--accent", "--success-600"], "#16a34a"),
+    successStrong: pick(["--p", "--primary", "--success-800"], "#14532d"),
     text: pick(["--bc", "--base-content"], "#1f2937"),
     bg: pick(["--b1", "--base-100"], "#ffffff"),
   });
@@ -97,10 +97,6 @@ const TaskHeatmapDaisy = ({ numDays = 365 }) => {
   return (
     <div
       className="
-        bg-base-300 
-        p-3 
-        rounded-xl 
-        shadow-md 
         overflow-x-auto 
         overflow-y-hidden 
         scrollbar-thin 
@@ -109,6 +105,7 @@ const TaskHeatmapDaisy = ({ numDays = 365 }) => {
       "
     >
       <div className="min-w-[800px]">
+        <div className="opacity-25 text-sm font-bold text-center mb-6">Tâches de l'année dernière</div>
         <CalendarHeatmap
           startDate={start}
           endDate={end}

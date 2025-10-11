@@ -1,8 +1,13 @@
 import { History, CalendarCheck, LayoutDashboard, Menu, X, ChartNoAxesColumn, User2, Link2 } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
-function Sidebar({ onSwitch }) {
+function Sidebar({ view, onSwitch }) {
     const [deployed, Deploy] = useState(false)
+
+    useEffect(() => {
+        Deploy(false)
+    }, [view])
+
     return (
         <aside className={`sidebar flex flex-col gap-4 items-end z-10000 p-2 pt-5 bg-base-200 w-15 transition-all duration-300 ${deployed ? "w-50": ""}`}>
             <h2 className="logo bg-primary text-md/1 font-black italic text-white p-2 pt-1 flex items-center justify-center rounded-xl"
@@ -19,7 +24,7 @@ function Sidebar({ onSwitch }) {
 
             <ul className="links flex flex-col gap-3 pt-12 h-full">
                 <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2"
+                    className={`item btn btn-soft btn-sm justify-end gap-2 ${view === "home" ? "btn-primary" : ""}`}
                     onClick={() => onSwitch("home")}
                 >
                     <span className={!deployed ? "hidden" : ""}
@@ -28,7 +33,7 @@ function Sidebar({ onSwitch }) {
                 </li>
 
                 <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2"
+                    className={`item btn btn-soft btn-sm justify-end gap-2 ${view === "todo" ? "btn-primary" : ""}`}
                     onClick={() => onSwitch("todo")}
                 >
                     <span className={!deployed ? "hidden" : ""}
@@ -37,7 +42,7 @@ function Sidebar({ onSwitch }) {
                 </li>
 
                 <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2"
+                    className={`item btn btn-soft btn-sm justify-end gap-2 ${view === "historic" ? "btn-primary" : ""}`}
                     onClick={() => onSwitch("historic")}
                 >
                     <span className={!deployed ? "hidden" : ""}
@@ -46,7 +51,7 @@ function Sidebar({ onSwitch }) {
                 </li>
 
                 <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2"
+                    className={`item btn btn-soft btn-sm justify-end gap-2 ${view === "stats" ? "btn-primary" : ""}`}
                     onClick={() => onSwitch("stats")}
                 >
                     <span className={!deployed ? "hidden" : ""}
@@ -55,21 +60,12 @@ function Sidebar({ onSwitch }) {
                 </li>
 
                 <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2 mt-auto self-end"
+                    className={`item btn btn-soft btn-sm justify-end gap-2 mt-auto self-end ${view === "user" ? "btn-primary" : ""}`}
                     onClick={() => onSwitch("user")}
                 >
                     <span className={!deployed ? "hidden" : ""}
                     >Mon compte</span>
                     <User2 className="w-4 h-4" />
-                </li>
-
-                <li 
-                    className="item btn btn-soft btn-sm justify-end gap-2 self-end"
-                    onClick={() => onSwitch("share")}
-                >
-                    <span className={!deployed ? "hidden" : ""}
-                    >Partager</span>
-                    <Link2 className="w-4 h-4" />
                 </li>
             </ul>
         </aside>

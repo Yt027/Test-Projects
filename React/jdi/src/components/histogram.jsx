@@ -3,7 +3,8 @@ import Chart from "react-apexcharts";
 
 const Histogram = () => {
   const tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-  // --- 1️⃣ Lire les variables DaisyUI dynamiquement
+
+  // --- 1️⃣ Lecture des variables CSS DaisyUI dynamiquement
   const readCSS = (name) =>
     typeof window !== "undefined"
       ? getComputedStyle(document.documentElement)
@@ -24,11 +25,13 @@ const Histogram = () => {
     accent: pick(["--a", "--accent"], "#4ade80"),
     text: pick(["--bc", "--base-content"], "#1f2937"),
     bg: pick(["--b1", "--base-100"], "#ffffff"),
+    surface: pick(["--b2", "--base-200"], "#e5e7eb"),
+    hover: pick(["--pf", "--primary-focus"], "#16a34a"),
   });
 
   const [colors, setColors] = useState(getThemeColors());
 
-  // Observer le changement de thème DaisyUI
+  // --- 2️⃣ Observer le changement de thème DaisyUI
   useEffect(() => {
     const reload = () => setColors(getThemeColors());
     const obs = new MutationObserver(reload);
@@ -43,7 +46,7 @@ const Histogram = () => {
     };
   }, []);
 
-  // --- 2️⃣ Calculer les tâches accomplies sur les 7 derniers jours
+  // --- 3️⃣ Calcul des données
   const last7Days = useMemo(() => {
     const days = [];
     const today = new Date();
@@ -83,7 +86,7 @@ const Histogram = () => {
     d.toLocaleDateString("fr-FR", { weekday: "short" })
   );
 
-  // --- 3️⃣ Config ApexCharts
+  // --- 4️⃣ Config ApexCharts stylée avec DaisyUI
   const options = {
     chart: {
       type: "bar",
@@ -108,6 +111,20 @@ const Histogram = () => {
     },
     dataLabels: { enabled: false },
     colors: Array(7).fill(colors.primary),
+    states: {
+      hover: {
+        filter: {
+          type: "lighten",
+          value: 0.5,
+        },
+      },
+      active: {
+        filter: {
+          type: "darken",
+          value: 0.8,
+        },
+      },
+    },
     xaxis: {
       categories,
       labels: {
@@ -130,7 +147,7 @@ const Histogram = () => {
       forceNiceScale: true,
     },
     grid: {
-      borderColor: colors.bg,
+      borderColor: colors.surface,
       strokeDashArray: 4,
       padding: { left: 10, right: 10 },
     },
@@ -139,17 +156,41 @@ const Histogram = () => {
         document.documentElement.getAttribute("data-theme") === "night"
           ? "dark"
           : "light",
+      style: {
+        fontSize: "12px",
+        fontFamily: "inherit",
+      },
+      fillSeriesColor: false,
+      marker: { show: false },
       y: {
         formatter: (val) => `${val} tâche${val > 1 ? "s" : ""}`,
+      },
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        const value = series[seriesIndex][dataPointIndex];
+        const label = w.globals.labels[dataPointIndex];
+        const bg = colors.surface;
+        const text = colors.text;
+        return `
+          <div style="
+            background:${bg};
+            color:${text};
+            padding:6px 10px;
+            border-radius:6px;
+            font-size:12px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.15);
+          ">
+            <strong>${label}</strong><br/>
+            ${value} tâche${value > 1 ? "s" : ""}
+          </div>`;
       },
     },
   };
 
   const series = [{ name: "Tâches accomplies", data: seriesData }];
 
-  // --- 4️⃣ Rendu
+  // --- 5️⃣ Rendu
   return (
-    <div className="bg-base-300 p-4 rounded-xl shadow-md">
+    <div className="">
       <Chart options={options} series={series} type="bar" height={260} />
     </div>
   );

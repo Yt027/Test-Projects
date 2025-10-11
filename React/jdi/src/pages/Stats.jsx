@@ -4,11 +4,14 @@ import MonthlyTasks from "../components/monthlyTasks";
 
 function Stats() {
     return (
-        <>
-            <TaskHeatmap />
-            <Histogram />
-            <MonthlyTasks />
-        </>
+        <div className="bg-base-300 p-4 rounded-xl shadow-md">
+            <h2 className="text-center text-lg font-semibold mb-6">Statistiques</h2>
+            <div className="charts flex flex-col gap-6">
+                <TaskHeatmap />
+                <Histogram />
+                <MonthlyTasks />
+            </div>
+        </div>
     )
 }
 

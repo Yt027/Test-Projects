@@ -127,16 +127,40 @@ const MonthlyTasks = () => {
         document.documentElement.getAttribute("data-theme") === "night"
           ? "dark"
           : "light",
+      style: {
+        fontSize: "12px",
+        fontFamily: "inherit",
+      },
+      fillSeriesColor: false,
+      marker: { show: false },
       y: {
         formatter: (val) => `${val} tâche${val > 1 ? "s" : ""}`,
       },
-    },
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        const value = series[seriesIndex][dataPointIndex];
+        const label = w.globals.labels[dataPointIndex];
+        const bg = colors.surface;
+        const text = colors.text;
+        return `
+          <div style="
+            background:${bg};
+            color:${text};
+            padding:6px 10px;
+            border-radius:6px;
+            font-size:12px;
+            box-shadow:0 2px 6px rgba(0,0,0,0.15);
+          ">
+            <strong>${label}</strong><br/>
+            ${value} tâche${value > 1 ? "s" : ""}
+          </div>`;
+      },
+    }
   };
 
   const series = [{ name: "Tâches accomplies", data: seriesData }];
 
   return (
-    <div className="bg-base-300 p-4 rounded-xl shadow-md overflow-x-auto">
+    <div className="overflow-y-hidden pr-5">
       <Chart options={options} series={series} type="line" height={300} />
     </div>
   );
