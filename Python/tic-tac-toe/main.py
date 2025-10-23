@@ -38,8 +38,6 @@ def check_vertical_move(choosen, selected, d):
             return True
         if selected == 4:
             return True
-        if choosen == 0 and selected == 3:
-            return True
     return False
 
 
