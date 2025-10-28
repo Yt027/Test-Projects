@@ -8,7 +8,18 @@ from modules import *
 pygame.display.set_caption("Tux Run")
 
 def add_OBS():
-    GAME["OBS"].append(GAME["OBJ"][randint(0, 2)].copy())
+    id = randint(0, 2)
+    # Adding flying vulture
+    if id == 2:
+        GAME["OBS"].append(
+            {
+                "rect": GAME["OBJ"][id].copy(),
+                "img_id": 0,
+                "img_timer": 0
+            }
+        )
+    # Adding static obstacles
+    else: GAME["OBS"].append(GAME["OBJ"][id].copy())
 
 
 # Game function
@@ -80,10 +91,29 @@ def main():
         # Obstacles
         OBS_BIN = []
         for i in range(len(GAME["OBS"])):
+            vulture = None
             obs = GAME["OBS"][i]
-            obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
-            obs_rect = pygame.Rect(obs[0], obs[1] - camera_y, obs[2], obs[3])
-            pygame.draw.rect(screen, COLORS["primary"], obs_rect)
+            # Draw static obtacles
+            if type(obs) == list:
+                obs[0] -= PLAYER["run_speed"] * GAME["DELTA"]
+                obs_rect = pygame.Rect(obs[0], obs[1] - camera_y, obs[2], obs[3])
+                pygame.draw.rect(screen, COLORS["primary"], obs_rect)
+            else:
+                vulture = obs
+                obs = vulture["rect"]
+                obs[0] -= (PLAYER["run_speed"] + 75) * GAME["DELTA"]
+                obs_rect = pygame.Rect(obs[0], obs[1] - camera_y, obs[2], obs[3])
+                
+                # Manage vulture image changes
+                vulture_delta = 85
+                vulture_image = pygame.image.load(f"./assets/vulture/fly{vulture['img_id']}.png")
+                screen.blit(pygame.transform.scale(vulture_image, (obs[2], obs[3])), obs_rect)
+
+                if vulture["img_timer"] >= vulture_delta: # Change image every 100 ms
+                    vulture["img_id"] = vulture["img_id"] + 1 if vulture["img_id"] <= 2 else 0
+                vulture["img_timer"] = vulture["img_timer"] + (GAME["DELTA"] * 1000) if vulture["img_timer"] < vulture_delta else 0
+                # pygame.draw.rect(screen, COLORS["primary"], obs_rect)
+
 
 
             # Manage collision with player
@@ -96,7 +126,7 @@ def main():
                     PLAYER["bonus"] += 1
 
             if obs[0] <= -100:
-                OBS_BIN.append(obs)
+                OBS_BIN.append(vulture if vulture else obs)
         
         for obs_ in OBS_BIN:
             GAME["OBS"].remove(obs_)

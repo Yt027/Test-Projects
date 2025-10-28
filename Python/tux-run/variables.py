@@ -19,7 +19,7 @@ GAME = {
         # List of game obstacle types
         [SCREEN_WIDTH + 10, GROUND - 40, 20, 40], # Small cactus
         [SCREEN_WIDTH + 10, GROUND - 60, 30, 60], # Large cactus
-        [SCREEN_WIDTH + 10, GROUND - 150, 40, 30]  # Bird
+        [SCREEN_WIDTH + 10, GROUND - 150, 50, 37]  # Bird
     ],
     "OBS": [
         # List of current obstacles on screen    
@@ -42,7 +42,7 @@ PLAYER = {
 }
 
 COLORS = {
-    "background": (15, 20, 25),
+    "background": (233, 234, 235),
     "text": (245, 245, 250),
     "ground": (130, 110, 110),
     "primary": (30, 170, 240)
