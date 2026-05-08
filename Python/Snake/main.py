@@ -122,7 +122,7 @@ def main():
             segment_rect = pygame.Rect(segment["x"], segment["y"], bloc, bloc)
             color = (75, 155, 0)
 
-            # Manage Head diferently
+            # Manage Head differently
             if i == 0:
                 color = (0, 255, 0)
                 if segment["x"] == food["x"] and segment["y"] == food["y"]:
