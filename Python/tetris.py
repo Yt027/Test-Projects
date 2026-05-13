@@ -10,21 +10,61 @@ pygame.display.set_caption('Tetris')
 
 # Tetris figures
 figures = [
-    [
-        '* * * *'
-    ],
-    [
-        '* * *',
-        ', * ,'
-    ],
+    (
+        [
+            '* * * *'
+        ],
+        [
+            '*',
+            '*',
+            '*',
+            '*',
+        ],
+    ),
+    (
+        [
+            '* * *',
+            ', * ,'
+        ],
+        [
+            ', * ,',
+            '* * *'
+        ],
+        [
+            '* ,',
+            '* *',
+            '* ,'
+        ],
+        [
+            ', *',
+            '* *',
+            ', *'
+        ],
+    ),
     [
         '* *',
         '* *'
     ],
-    [
-        '*',
-        '* * * *'
-    ]
+    (
+        [
+            '*',
+            '* * *'
+        ],
+        [
+            '* *',
+            '*',
+            '*'
+        ],
+        [
+            '* * *',
+            ', , *'
+        ],
+        [
+            '*',
+            '*',
+            '* *'
+        ],
+    )
 ]
 
 ground = [
@@ -41,9 +81,12 @@ bloc_size = 50
 
 
 class Bloc:
-    def __init__(self, rects, color):
+    def __init__(self, rects, color, n, siblings):
         self.rects = rects
         self.color = color
+
+        self.fig_pos = n
+        self.has_siblings = siblings
         pass
 
     def collide_ground(self):
@@ -60,6 +103,22 @@ class Bloc:
     def insert_to_ground(self):
         for part in self.rects:
             ground.append(part)
+    
+    def switch_sibling(self):
+        print('siblings')
+
+        actual_sub_pos = self.has_siblings
+
+        if actual_sub_pos < len(figures[self.fig_pos]) -1:
+            sibling_pos = actual_sub_pos + 1
+        else: sibling_pos = 0
+
+        new_bloc = game.generate_bloc(self.fig_pos, bloc_size, sibling_pos)
+        self.rects = new_bloc.rects
+        self.has_siblings = sibling_pos
+
+        print(self.has_siblings)
+
 
 class game:
     def exit():
@@ -84,19 +143,22 @@ class game:
         for y in range(len(fig)):
             line = fig[y]
             list_line = line.split()
-            print(list_line)
 
             for x in range(len(list_line)):
                 if list_line[x] == '*': positions.append((x, y))
         
         return positions
     
-    def generate_bloc(fig = None, bloc_size = bloc_size):
+    def generate_bloc(fig = None, bloc_size = bloc_size, sub_fig = None, accurate_pos=None):
         # Create a list of rectangles from random tetris figure using game.build_pos to get int coordinates
         if not fig: fig = randint(0, len(figures) - 1)
+        n = fig
 
         fig = figures[fig]
-        print(fig)
+        if type(fig) == tuple:
+            if sub_fig == None: sub_fig = randint(0, len(fig) - 1)
+            fig = fig[sub_fig]
+        
         pos = game.build_pos(fig)
 
         blocs = []
@@ -111,7 +173,7 @@ class game:
             randint(0, 255)
         )
 
-        return Bloc(blocs, bloc_color)
+        return Bloc(blocs, bloc_color, n, sub_fig)
     
     def move_bloc(bloc, x, y):
         # Move every rectangles in bloc object by increasing its x or y value by given x and y
@@ -140,20 +202,28 @@ class game:
 
 
 def main():
-    actual_bloc = game.generate_bloc()
+    actual_bloc = game.generate_bloc(1)
+    print(actual_bloc.has_siblings)
+
 
     while True:
         # Handling events
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game.exit()
-
+            
         # Move the actual bloc horizontally
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_LEFT]:
-            game.move_bloc(actual_bloc, -bloc_size, 0)
-        if keys[pygame.K_RIGHT]:
-            game.move_bloc(actual_bloc, bloc_size, 0)
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    game.move_bloc(actual_bloc, -bloc_size, 0)
+                if event.key == pygame.K_RIGHT:
+                    game.move_bloc(actual_bloc, bloc_size, 0)
+                
+                if event.key == pygame.K_SPACE and actual_bloc.has_siblings != None:
+                    actual_bloc.switch_sibling()
+
+
+
 
 
         # Drawing background
@@ -161,7 +231,7 @@ def main():
 
         game.draw_bloc(actual_bloc)
         if not actual_bloc.collide_ground():
-            game.move_bloc(actual_bloc, 0, 1)
+            game.move_bloc(actual_bloc, 0, 5)
         else:
             actual_bloc.insert_to_ground()
             actual_bloc = game.generate_bloc()
