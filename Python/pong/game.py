@@ -1,4 +1,4 @@
-import pygame, sys
+import pygame, sys, math
 pygame.init()
 
 screen_size = (800, 500)
@@ -32,7 +32,7 @@ class Game:
         pygame.display.update()
 
 class Ball:
-    def __init__(self, velocity = (1, 2), init_pos = None):
+    def __init__(self, velocity = (1, 1), init_pos = None):
         if not init_pos: init_pos = (screen_size[0]/2, screen_size[1]/2)
 
         self.x, self.y = init_pos
@@ -45,24 +45,36 @@ class Ball:
         pygame.draw.rect(screen, (200, 30, 30), self.rect, 0, 30)
 
     def update(self, watch_list):
+        global left_wall, right_wall, top_wall, bottom_wall
         self.x += self.vx
         self.y += self.vy
 
-        print(f"X: {self.x}, Y: {self.y}")
+        if abs(self.vx) > abs(self.svx):
+            if self.vx < 0:
+                self.vx += 0.1
+            elif self.vx > 0:
+                self.vx -= 0.1
 
-        for obstacle in watch_list:
-            if self.rect.x < obstacle[0]:
-                self.vx = -(self.svx * 1)
+        if abs(self.vy) > abs(self.svy):
+            if self.vy < 0:
+                self.vy += 0.1
+            elif self.vy > 0:
+                self.vy -= 0.1
 
-            if self.rect.x > obstacle[0]:
-                self.vx = (self.svx * 1)
+        print(f"X: {self.vx}, Y: {self.vy}")
 
+        # Bouncing factor
+        bounce = 2
 
-            if self.rect.y < obstacle[1]:
-                self.vy = -(self.svy * 1)
+        if self.rect.colliderect(top_wall):
+            self.vy = (self.svy * bounce)
+        if self.rect.colliderect(bottom_wall):
+            self.vy = -(self.svy * bounce)
 
-            if self.rect.y > obstacle[1]:
-                self.vy = (self.svy * 1)
+        if self.rect.colliderect(right_wall):
+            self.vx = -(self.svx * bounce)
+        if self.rect.colliderect(left_wall):
+            self.vx = (self.svx * bounce)
         
         self.rect = pygame.Rect(self.x, self.y, 20, 20)
 
