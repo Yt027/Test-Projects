@@ -12,7 +12,7 @@ screen = pygame.display.set_mode(screen_size)
 pygame.display.set_caption('Space Shooter')
 
 # Variables
-bloc_size = 20
+bloc_size = 25
 
 
 
@@ -31,8 +31,14 @@ class App:
     def refresh(self):
         self.Clock.tick(self.fps)
         pygame.display.update()
+
+    def label(self, text, pos=(0, 0), font_size = 18, color = (0, 0, 25)):
+        font = pygame.font.SysFont('Poppins', font_size)
+        rendering = font.render(text, True, color)
+        
+        screen.blit(rendering, pos)
     
-    def build_bloc(self, figure, pos=(0, 0), bloc = 20, accept = '*'):
+    def build_bloc(self, figure, pos=(0, 0), bloc = bloc_size, accept = '*'):
         pos_x, pos_y = pos
         rectangles = []
 
@@ -42,7 +48,7 @@ class App:
             for x in range(len(line)):
                 char = line[x]
                 if char == accept:
-                    rectangles.append((
+                    rectangles.append(pygame.Rect(
                         pos_x + (x * bloc), 
                         pos_y + (y * bloc), 
                         bloc,
@@ -63,14 +69,24 @@ class Player:
         self.pos_x = screen_w / 2
         self.pos_y = screen_h / 2
         self.bloc = bloc
+        self.bullet_velocity = -30
+        self.health = 100
+        self.damage = 1
+        self.rectangles = []
+
+        self.bullets = []
+
         self.craft()
     
     def craft(self):
         self.figure = [
             '- - * - -',
-            '* * * * *',
-            '- * * * -'
+            '- * * * -',
+            '* - * - *'
         ]
+        
+        self.height = len(self.figure) * self.bloc
+        self.x_center()
     
     def x_center(self):
         width = 0
@@ -79,8 +95,34 @@ class Player:
             if len(line) > width: width = len(line)
         
         width *= self.bloc
+        self.width = width
 
         return self.pos_x + (width / 2)
+
+    def update(self, enemy):
+        # Updating/Drawing bullets
+        updated_bullets = []
+        for pos in self.bullets:
+            pygame.draw.circle(screen, (50, 50, 240), pos, 5)
+            
+            if pos[1] < screen_h: updated_bullets.append((pos[0], pos[1] + self.bullet_velocity))
+        
+        self.bullets = updated_bullets
+
+        # Getting damages from enemy
+        for rectangle in self.rectangles:
+            enemy_bullets = []
+            for pos in enemy.bullets:
+                if rectangle.collidepoint(pos):
+                    self.health -= enemy.damage
+                else:
+                    enemy_bullets.append(pos)
+            enemy.bullets = enemy_bullets
+                
+    
+    def shoot(self, percent = 10):
+        if randint(0, 100) <= percent:
+            self.bullets.append((self.x_center(), self.pos_y - self.bloc))
 
 
 class Enemy:
@@ -89,15 +131,26 @@ class Enemy:
         self.pos_x = randint(0, int(screen_w / bloc_size) - 1) * bloc_size
         self.bloc = bloc
         self.velocity = velocity
+        self.bullet_velocity = 30
+        self.health = 100
+        self.damage = 1
+        self.rectangles = []
+
+        self.bullets = []
 
         self.craft()
 
     def craft(self):
         self.figure = [
-            '* * * * *',
-            '- * * * -',
-            '- - * - -'
+            '- * - * * * - * -',
+            '* * * * * * * * *',
+            '- - * * * * * - -',
+            '- - - * * * - - -',
+            '- - - - * - - - -'
         ]
+
+        self.height = len(self.figure * self.bloc)
+        self.x_center()
     
     def x_center(self):
         width = 0
@@ -110,15 +163,47 @@ class Enemy:
 
         return self.pos_x + (width / 2)
     
-    def update(self, player_center, player_bloc):
+    def update(self, player):
+        player_center = player.x_center()
+        player_bloc = player.bloc
+
+        print(self.health)
+
+        # Updating/Drawing bullets
+        updated_bullets = []
+        for pos in self.bullets:
+            pygame.draw.circle(screen, (240, 50, 50), pos, 5)
+            
+            if pos[1] < screen_h: updated_bullets.append((pos[0], pos[1] + self.bullet_velocity))
+        
+        self.bullets = updated_bullets
+
+        # Aiming the player
         center = self.x_center()
 
         if center < player_center - player_bloc:
             center += (self.bloc * self.velocity)
         elif center > player_center + player_bloc:
             center -= (self.bloc * self.velocity)
+        
+        if center > player_center - player.width and center < player_center + player.width:
+            self.shoot()
 
         self.pos_x = center - (self.width / 2)
+
+        # Getting damages from player
+        for rectangle in self.rectangles:
+            player_bullets = []
+            for pos in player.bullets:
+                if rectangle.collidepoint(pos):
+                    self.health -= player.damage
+                else:
+                    player_bullets.append(pos)
+            player.bullets = player_bullets
+    
+    def shoot(self, percent = 10):
+        if randint(0, 100) <= percent:
+            self.bullets.append((self.x_center(), self.pos_y + self.height + self.bloc))
 
 
 def main():
@@ -144,19 +229,30 @@ def main():
             player.pos_y -= player.bloc
         if keys[pygame.K_DOWN]:
             player.pos_y += player.bloc
+        
+        if keys[pygame.K_SPACE]:
+            player.shoot(50)
 
         
         # Background
         APP.background()
 
         # Draw player
-        player_blocs = APP.build_bloc(player.figure, (player.pos_x, player.pos_y))
-        APP.draw_blocs(player_blocs)
+        player.rectangles = APP.build_bloc(player.figure, (player.pos_x, player.pos_y))
+        APP.draw_blocs(player.rectangles)
+        player.update(enemy)
 
         # Draw enemy
-        enemy_blocs = APP.build_bloc(enemy.figure, (enemy.pos_x, enemy.pos_y))
-        APP.draw_blocs(enemy_blocs)
-        enemy.update(player.x_center(), player.bloc)
+        enemy.rectangles = APP.build_bloc(enemy.figure, (enemy.pos_x, enemy.pos_y))
+        APP.draw_blocs(enemy.rectangles)
+        enemy.update(player)
+
+
+        # Enemy health
+        APP.label(f"Health: {enemy.health}", (screen_w - 100, 10), 24, (240, 50, 50))
+
+        # Player health
+        APP.label(f"Health: {player.health}", (screen_w - 100, 35), 24, (50, 50, 240))
 
 
         # Refresh
